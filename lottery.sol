@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0
 
 pragma solidity >=0.7.0 <0.9.0;
+import "./CommitReveal.sol";
 
-contract Lottery {
+contract Lottery is CommitReveal {
 	uint public startTimeS1;
     uint public T1;
     uint public N; 
@@ -26,6 +27,7 @@ contract Lottery {
 		require(numOfUser < N, "Tickets are sold out.");
 
 		userRandNum[msg.sender] = _randNum;
+		commit(getSaltedHash(bytes32(userRandNum[msg.sender]), bytes32(userRandNum[msg.sender] + block.timestamp)));
 		numOfUser += 1;
 	}
 }
