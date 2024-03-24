@@ -66,7 +66,7 @@ contract Lottery is CommitReveal {
 			player[msg.sender].canWithdraw == false;
 		}
 		if(newN == 0) {
-			owner.transfer(0.001 ether * newN);
+			owner.transfer(0.001 ether * numOfUser);
 		} else {
 			winnerNum %= newN;
 			address payable winner = payable(playerAddress[winnerNum]);
