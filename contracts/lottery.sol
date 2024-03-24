@@ -12,6 +12,8 @@ contract Lottery is CommitReveal {
 	uint public constant TICKET_PRICE = 0.001 ether;
 	uint16 public numOfUser = 0;
 	address payable owner = payable(msg.sender);
+	uint public winnerNum = 0;
+	uint16 public newN = 0;
 	struct Player {
 		bytes32 NumHash;
 		uint Num;
@@ -52,23 +54,23 @@ contract Lottery is CommitReveal {
 	function findWinner() public {
 		require(block.timestamp < startTime + T1 + T2 + T3 && block.timestamp > startTime + T1 + T2, "stage 3 is over/not time yet.");
 		require(msg.sender == owner, "are you owner?");
-		uint winnerNum = 0;
-		uint16 newN = 0;
+		
 		for (uint i=1; i <= numOfUser; i++) {
 			if(!commits[playerAddress[i]].revealed
 			|| (player[playerAddress[i]].Num > 999 || player[playerAddress[i]].Num < 0)) {
 				continue; 
+			} else {
+				newN++;
+				winnerNum = winnerNum ^ player[playerAddress[i]].Num;
+				player[playerAddress[i]].order = newN;
+				playerAddress[newN] = playerAddress[i];
 			}
-			newN++;
-			winnerNum ^= player[playerAddress[i]].Num;
-			player[playerAddress[i]].order = newN;
-			playerAddress[newN] = playerAddress[i];
-			player[msg.sender].canWithdraw == false;
 		}
 		if(newN == 0) {
 			owner.transfer(0.001 ether * numOfUser);
 		} else {
-			winnerNum %= newN;
+			winnerNum = winnerNum % newN;
+			winnerNum++;
 			address payable winner = payable(playerAddress[winnerNum]);
             winner.transfer(0.00098 ether * numOfUser);
             owner.transfer(0.00002 ether * numOfUser);
@@ -88,5 +90,7 @@ contract Lottery is CommitReveal {
 		require(address(this).balance == 0);
 		require(msg.sender == owner);
 		numOfUser = 0;
+		winnerNum = 0;
+		newN = 0;
 	}
 }
