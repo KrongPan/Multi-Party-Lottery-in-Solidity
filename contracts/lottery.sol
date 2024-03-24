@@ -4,16 +4,16 @@ pragma solidity >=0.7.0 <0.9.0;
 import "./CommitReveal.sol";
 
 contract Lottery is CommitReveal {
-	uint private startTime;
-    uint private T1;
-	uint private T2;
-	uint private T3;
-    uint private N; 
-	uint private constant TICKET_PRICE = 0.001 ether;
-	uint16 private numOfUser = 0;
+	uint public startTime;
+    uint public T1;
+	uint public T2;
+	uint public T3;
+    uint public N; 
+	uint public constant TICKET_PRICE = 0.001 ether;
+	uint16 public numOfUser = 0;
 	address payable owner = payable(msg.sender);
-	uint private winnerNum = 0;
-	uint16 private newN = 0;
+	uint public winnerNum = 0;
+	uint16 public newN = 0;
 	struct Player {
 		bytes32 NumHash;
 		uint Num;
@@ -21,8 +21,8 @@ contract Lottery is CommitReveal {
 		bool canWithdraw;
 	}
 
-	mapping(address => Player) private player;
-	mapping(uint => address) private playerAddress;
+	mapping(address => Player) public player;
+	mapping(uint => address) public playerAddress;
     constructor(uint _N, uint _T1, uint _T2, uint _T3) {
         T1 = _T1;
         T2 = _T2;
