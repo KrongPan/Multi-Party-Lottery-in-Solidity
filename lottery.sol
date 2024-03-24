@@ -73,4 +73,9 @@ contract Lottery is CommitReveal {
 		}
 	}
 
+	function withdraw() public {
+		require(block.timestamp > startTime + T1 + T2 + T3, "stage 4 is not time yet.");
+		address payable payback = payable(msg.sender);
+		payback.transfer(0.001 ether);
+	}
 }
