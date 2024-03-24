@@ -28,7 +28,7 @@ contract Lottery is CommitReveal {
 		N = _N;
     }
 
-    function Pick_a_number(uint _randNum, uint _salt) public payable {
+    function ChooseNum(uint _randNum, uint _salt) public payable {
 		if(numOfUser == 0) {
 			startTime = block.timestamp;
 		}
@@ -49,7 +49,7 @@ contract Lottery is CommitReveal {
 		player[msg.sender].Num = _randNum;
 	}
 
-	function Determine_the_winner() public {
+	function findWinner() public {
 		require(block.timestamp < startTime + T1 + T2 + T3 && block.timestamp > startTime + T1 + T2, "stage 3 is over/not time yet.");
 		require(msg.sender == owner, "are you owner?");
 		uint winnerNum = 0;
@@ -70,8 +70,8 @@ contract Lottery is CommitReveal {
 		} else {
 			winnerNum %= newN;
 			address payable winner = payable(playerAddress[winnerNum]);
-            winner.transfer(0.00098 ether * newN);
-            owner.transfer(0.00002 ether * newN);
+            winner.transfer(0.00098 ether * numOfUser);
+            owner.transfer(0.00002 ether * numOfUser);
 		}
 	}
 
